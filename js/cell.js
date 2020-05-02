@@ -1,56 +1,56 @@
-function createInlineDiv(i) {
-    let div = document.createElement('DIV');
-    div.innerHTML = i;
-    div.setAttribute('id', `cell${i}`);
-    div.setAttribute('class', 'cell');
-    // div.addEventListener('click', onCellClicked);
-    return div;
-}
-
-function createContainer() {
-    let container = document.createElement('DIV');
-    container.setAttribute('class', 'container');
-    return container;
-}
-
-function createTable() {
-    let container;
-    for (let i = 1; i <= 100; i++) {
-        if (i == 1) {
-            container = createContainer();
-        }
-
-        if ((i - 1) % 10 === 0) {
-            container = createContainer();
-        }
-        let cell = createInlineDiv(i);
-        container.appendChild(cell);
-        document.body.appendChild(container);
-    }
-
-}
-
-
 class Cell {
-    constructor(x, y, w) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        if (Math.random(1) < 0.5) {
-            this.bomb = true;
-        } else {
-            this.bomb = false;
-        }
-
+    constructor() {
+        this.neighborCount = 0;
+        this.bomb = false;
         this.revealed = false;
     }
 
-    show(i,j) {
+    reveal() {
+        console.log('clicked');
+        this.revealed = true;
+    }
+
+    show(i, j, container) {
         let div = document.createElement('DIV');
-        div.innerHTML = `${i},${j}`;
         div.setAttribute('id', `cell${i},${j}`);
         div.setAttribute('class', 'cell');
-        // div.addEventListener('click', onCellClicked);
-        return div;
+        div.addEventListener('click', mousePressed);
+
+        if (this.revealed) {
+            if (this.bomb) {
+                div.setAttribute('class', 'cell bomb');
+            } else {
+                div.setAttribute('class', 'darkCell');
+                if (this.neighborCount > 0) {
+                    div.innerHTML = this.neighborCount
+                }
+            }
+        }
+
+        container.appendChild(div);
+        document.body.appendChild(container);
     }
+
+    countBees(x, y, rows, cols) {
+        let total = 0;
+        if (this.bomb) {
+            this.neighborCount = -1;
+        }
+
+        for (let xOff = -1; xOff <= 1; xOff++) {
+            for (let yOff = -1; yOff <= 1; yOff++) {
+                const i = x + xOff;
+                const j = y + yOff;
+                if (i > -1 && i < cols && j > - 1 && j < rows) {
+                    const neighbor = grid[i][j];
+                    if (neighbor.bomb) {
+                        total++;
+                    }
+                }
+            }
+
+        }
+        this.neighborCount = total
+    }
+
 }

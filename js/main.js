@@ -1,10 +1,8 @@
-// const canvas = document.getElementById('canvas');
-// const ctx = canvas.getContext("2d");
 let grid;
 let rows;
 let cols;
 let w = 10;
-
+const totalBombs = 10;
 
 function make2DArray(cols, rows) {
     let arr = new Array(cols);
@@ -13,6 +11,10 @@ function make2DArray(cols, rows) {
     }
     return arr;
 }
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
 
 function createContainer() {
     let container = document.createElement('DIV');
@@ -23,14 +25,35 @@ function createContainer() {
 function setup() {
     const width = 100;
     const height = 100;
-    // createCanvas(width, height, 'white');
     cols = Math.floor(width / w);
     rows = Math.floor(height / w);
-    console.log(rows, cols);
-    grid = make2DArray(10, 10);
+    grid = make2DArray(cols, rows);
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
-            grid[i][j] = new Cell(i * w, j * w, w);
+            grid[i][j] = new Cell(grid);
+        }
+
+    }
+
+    let options = []
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            options.push([i,j]);
+        }
+    }
+
+    for (let n = 0; n < totalBombs; n++) {
+        const index = getRandomInt(options.length);
+        const choice = options[index];
+        const i = choice[0];
+        const j = choice[1];
+        options.splice(index, 1);
+        grid[i][j].bomb = true;
+    }
+
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            grid[i][j].countBees(i, j, rows, cols);
         }
 
     }
@@ -40,10 +63,16 @@ function drawCells() {
     for (let i = 0; i < cols; i++) {
         let container = createContainer();
         for (let j = 0; j < rows; j++) {
-            container.appendChild(grid[i][j].show(i, j));
+            grid[i][j].show(i, j, container);
         }
-        document.body.appendChild(container);
     }
+}
+
+function mousePressed(e) {
+    const [i, j] = e.target.id.replace('cell', '').split(',')
+    grid[i][j].reveal();
+    document.body.innerHTML = '';
+    drawCells();
 }
 
 setup();
