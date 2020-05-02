@@ -3,6 +3,7 @@ class Cell {
         this.neighborCount = 0;
         this.bomb = false;
         this.revealed = false;
+        this.marked = false;
     }
 
     fillOtherCells(x, y, rows, cols) {
@@ -12,7 +13,7 @@ class Cell {
                 const j = y + yOff;
                 if (i > -1 && i < cols && j > - 1 && j < rows) {
                     const neighbor = grid[i][j];
-                    if (!neighbor.bomb && !neighbor.revealed) {
+                    if (!neighbor.bomb && !neighbor.revealed && !neighbor.marked) {
                         neighbor.reveal(Number(i), Number(j), rows, cols)
                     }
                 }
@@ -33,6 +34,12 @@ class Cell {
         div.setAttribute('id', `cell${i},${j}`);
         div.setAttribute('class', 'cell');
         div.addEventListener('click', mousePressed);
+
+        if(this.marked) {
+            console.log('here it comes');
+            div.setAttribute('class', 'marked');
+            div.setAttribute('disabled', true);
+        } 
 
         if (this.revealed) {
             if (this.bomb) {

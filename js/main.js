@@ -1,3 +1,8 @@
+// const reset = document.getElementById('reset');
+// if (reset) {
+//     reset.addEventListener('click', startGame);
+// }
+
 let grid;
 let rows;
 let cols;
@@ -14,7 +19,7 @@ function make2DArray(cols, rows) {
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
-  }
+}
 
 function createContainer() {
     let container = document.createElement('DIV');
@@ -38,7 +43,7 @@ function setup() {
     let options = []
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
-            options.push([i,j]);
+            options.push([i, j]);
         }
     }
 
@@ -74,17 +79,36 @@ function drawCells() {
             grid[i][j].show(i, j, container);
         }
     }
+    document.body.appendChild(drawResetButton());
 }
 
 function mousePressed(e) {
     const [i, j] = e.target.id.replace('cell', '').split(',')
-    grid[i][j].reveal(i, j, rows, cols);
-    if(grid[i][j].bomb) {
-        gameOver();
+    if (e.shiftKey) {
+        grid[i][j].marked = true;
+    } else {
+        grid[i][j].reveal(i, j, rows, cols);
+        if (grid[i][j].bomb) {
+            gameOver();
+        }
     }
     document.body.innerHTML = '';
     drawCells();
 }
 
-setup();
-drawCells();
+function drawResetButton() {
+    let button = document.createElement('BUTTON');
+    button.innerHTML = 'Reset';
+    button.setAttribute('id', 'reset');
+    button.setAttribute('class', 'reset-btn');
+    button.addEventListener('click', startGame);
+    return button;
+}
+
+function startGame() {
+    document.body.innerHTML = '';
+    setup();
+    drawCells();
+}
+
+startGame();
