@@ -59,6 +59,14 @@ function setup() {
     }
 }
 
+function gameOver() {
+    for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+            grid[i][j].revealed = true;
+        }
+    }
+}
+
 function drawCells() {
     for (let i = 0; i < cols; i++) {
         let container = createContainer();
@@ -70,7 +78,10 @@ function drawCells() {
 
 function mousePressed(e) {
     const [i, j] = e.target.id.replace('cell', '').split(',')
-    grid[i][j].reveal();
+    grid[i][j].reveal(i, j, rows, cols);
+    if(grid[i][j].bomb) {
+        gameOver();
+    }
     document.body.innerHTML = '';
     drawCells();
 }

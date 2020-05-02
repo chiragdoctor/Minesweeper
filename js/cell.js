@@ -5,9 +5,27 @@ class Cell {
         this.revealed = false;
     }
 
-    reveal() {
-        console.log('clicked');
+    fillOtherCells(x, y, rows, cols) {
+        for (let xOff = -1; xOff <= 1; xOff++) {
+            for (let yOff = -1; yOff <= 1; yOff++) {
+                const i = x + xOff;
+                const j = y + yOff;
+                if (i > -1 && i < cols && j > - 1 && j < rows) {
+                    const neighbor = grid[i][j];
+                    if (!neighbor.bomb && !neighbor.revealed) {
+                        neighbor.reveal(Number(i), Number(j), rows, cols)
+                    }
+                }
+            }
+
+        }
+    }
+
+    reveal(x, y, rows, cols) {
         this.revealed = true;
+        if(this.neighborCount == 0) {
+            this.fillOtherCells(Number(x), Number(y), rows, cols);
+        }
     }
 
     show(i, j, container) {
@@ -35,6 +53,7 @@ class Cell {
         let total = 0;
         if (this.bomb) {
             this.neighborCount = -1;
+            return;
         }
 
         for (let xOff = -1; xOff <= 1; xOff++) {
