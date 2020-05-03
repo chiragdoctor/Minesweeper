@@ -80,6 +80,7 @@ function drawCells() {
         }
     }
     document.body.appendChild(drawResetButton());
+    document.body.appendChild(instructions());
 }
 
 function mousePressed(e) {
@@ -87,10 +88,13 @@ function mousePressed(e) {
     if (e.shiftKey) {
         grid[i][j].marked = true;
     } else {
-        grid[i][j].reveal(i, j, rows, cols);
-        if (grid[i][j].bomb) {
-            gameOver();
+        if (!grid[i][j].marked) {
+            grid[i][j].reveal(i, j, rows, cols);
+            if (grid[i][j].bomb) {
+                gameOver();
+            }
         }
+
     }
     document.body.innerHTML = '';
     drawCells();
@@ -103,6 +107,12 @@ function drawResetButton() {
     button.setAttribute('class', 'reset-btn');
     button.addEventListener('click', startGame);
     return button;
+}
+
+function instructions() {
+    let p = document.createElement('H2');
+    p.innerHTML = '***Note - Press shift + Click to place the Flag***';
+    return p;
 }
 
 function startGame() {
