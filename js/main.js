@@ -108,7 +108,7 @@ function drawResetButton() {
 
 function instructions() {
     let p = document.createElement('H2');
-    p.innerHTML = '*** Press shift + Click to place the Flag ***';
+    p.innerHTML = '*** Press Shift + Click to place the Flag ***';
     return p;
 }
 
