@@ -67,7 +67,9 @@ function setup() {
 function gameOver() {
     for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
-            grid[i][j].revealed = true;
+            if(!grid[i][j].marked) {
+                grid[i][j].revealed = true;
+            }
         }
     }
 }
@@ -102,7 +104,7 @@ function mousePressed(e) {
 
 function drawResetButton() {
     let button = document.createElement('BUTTON');
-    button.innerHTML = 'Reset';
+    button.innerHTML = 'New Game';
     button.setAttribute('id', 'reset');
     button.setAttribute('class', 'reset-btn');
     button.addEventListener('click', startGame);
