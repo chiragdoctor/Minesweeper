@@ -1,8 +1,3 @@
-// const reset = document.getElementById('reset');
-// if (reset) {
-//     reset.addEventListener('click', startGame);
-// }
-
 let grid;
 let rows;
 let cols;
@@ -113,7 +108,7 @@ function drawResetButton() {
 
 function instructions() {
     let p = document.createElement('H2');
-    p.innerHTML = '***Note - Press shift + Click to place the Flag***';
+    p.innerHTML = '*** Press shift + Click to place the Flag ***';
     return p;
 }
 

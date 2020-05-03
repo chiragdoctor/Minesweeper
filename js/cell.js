@@ -36,7 +36,6 @@ class Cell {
         div.addEventListener('click', mousePressed);
 
         if(this.marked) {
-            console.log('here it comes');
             div.setAttribute('class', 'marked');
             div.setAttribute('disabled', true);
         } 
